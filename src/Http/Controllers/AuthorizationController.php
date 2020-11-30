@@ -106,7 +106,7 @@ class AuthorizationController
 
         if ($user) {
             $client->skipsAuthorization();
-            return $this->approveRequest($authRequest, $user);
+            return $this->approveRequest($authRequest, $user, true);
         }
     }
 
@@ -132,15 +132,15 @@ class AuthorizationController
      * @param  \Illuminate\Database\Eloquent\Model  $user
      * @return \Illuminate\Http\Response
      */
-    protected function approveRequest($authRequest, $user)
+    protected function approveRequest($authRequest, $user, $noRedirect = false)
     {
         $authRequest->setUser(new User($user->getAuthIdentifier()));
 
         $authRequest->setAuthorizationApproved(true);
 
-        return $this->withErrorHandling(function () use ($authRequest) {
+        return $this->withErrorHandling(function () use ($authRequest, $noRedirect) {
             return $this->convertResponse(
-                $this->server->completeAuthorizationRequest($authRequest, new Psr7Response)
+                $this->server->completeAuthorizationRequest($authRequest, new Psr7Response, $noRedirect)
             );
         });
     }
