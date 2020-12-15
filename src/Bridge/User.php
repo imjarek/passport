@@ -35,6 +35,7 @@ class User implements ClaimSetInterface, UserEntityInterface
             'address' => $user->address,
             'phone_number' => $user->phone,
             'phone_number_verified' => false,
+            'username' => $user->username,
             'preferred_username' => '',
             'profile' => '',
             'picture' => $user->picture,
